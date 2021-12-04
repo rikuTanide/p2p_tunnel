@@ -10,10 +10,10 @@
      - ドメイン可変
  - httpの転送
  - WebRTCで接続
- - WSのポートを動的にする
  - Uint32を何とかする
- - 引数でWebRTCを取得
  - console.log() をきれいにする。
  - blob_to の名前を変える
  - hostを書き換える
  - import綺麗にする
+ - WSのポートを動的にする
+ - 引数でWebRTCを取得

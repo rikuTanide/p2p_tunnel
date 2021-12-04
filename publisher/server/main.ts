@@ -12,6 +12,10 @@ import fetch, { Headers, HeadersInit } from "node-fetch";
 const fs = require("fs");
 
 export async function setUp() {
+  const host = "localhost";
+  const port = "3000";
+  const originalHost = `${host}:${port}`
+
   const app = express();
   app.get("/connection_id", (req, res) => {
     const id = (req.query as { id: string }).id;
@@ -29,7 +33,7 @@ export async function setUp() {
       return;
     }
     const { requestID, request } = requestObject;
-    const response = await proxy(requestID, request);
+    const response = await proxy(requestID, request, originalHost);
     res.status(200);
     res.setHeader("content-length", response.byteLength);
     res.write(response);
@@ -61,13 +65,14 @@ function readBodyAB(
 
 async function proxy(
   requestID: string,
-  request: RequestObject
+  request: RequestObject,
+  originalHost,
 ): Promise<ResponseArray> {
   const url = new URL(request.headline.url, "http://localhost:3000/");
 
   const res = await fetch(url.toString(), {
     method: request.headline.method,
-    headers: toFetchHeaders(request.headers),
+    headers: toFetchHeaders(request.headers, originalHost),
     compress: false,
     body: request.body.byteLength === 0 ? undefined : request.body,
   });
@@ -87,9 +92,13 @@ function toCarryHeaders(headers: Headers) {
   return res;
 }
 
-function toFetchHeaders(headers: SharedTypes.Headers): HeadersInit {
+function toFetchHeaders(headers: SharedTypes.Headers, originalHost: string): HeadersInit {
   const res: string[][] = [];
   for (const [key, values] of Object.entries(headers)) {
+    if (key === "host") {
+      res.push([key, originalHost ]);
+      continue;
+    }
     for (const value of values) {
       res.push([key, value]);
     }
