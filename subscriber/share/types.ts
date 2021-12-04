@@ -20,4 +20,7 @@ export interface ResponseObject {
 }
 
 // binder
-export type Requester = (requestID: string, request: RequestArrayBuffer) => void;
+export type Requester = (
+  requestID: string,
+  request: RequestArrayBuffer
+) => void;

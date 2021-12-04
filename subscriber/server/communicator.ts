@@ -2,7 +2,11 @@ import * as expressWs from "express-ws";
 import * as express from "express";
 import { WebSocket } from "ws";
 import * as Puppeteer from "puppeteer";
-import { RequestArrayBuffer, Requester, ResponseArrayBuffer } from "../share/types";
+import {
+  RequestArrayBuffer,
+  Requester,
+  ResponseArrayBuffer,
+} from "../share/types";
 import { Observable, Subject, Subscribable } from "rxjs";
 
 class WebSocketBinder {
@@ -46,7 +50,7 @@ function onWsOpen(
 ) {
   wsb.register(ws);
   ws.on("message", (msg: ArrayBuffer) => {
-    console.log( "typeof message" ,typeof msg)
+    console.log("typeof message", typeof msg);
     outgoing.next(msg);
   });
   ws.on("close", () => wsb.unlink(ws));

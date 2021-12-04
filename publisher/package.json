@@ -6,7 +6,7 @@
   "scripts": {
     "main": "node_modules\\.bin\\nodemon",
     "prettier": "prettier \"./**/*.(ts|tsx)\" --write",
-    "build": "node_modules\\.bin\\webpack serve"
+    "build": "node_modules\\.bin\\webpack"
   },
   "dependencies": {
     "express": "^4.17.1",

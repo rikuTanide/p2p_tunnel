@@ -8,7 +8,7 @@ import {
 } from "../share/types";
 import { Observable, Subject } from "rxjs";
 import { REQUEST_ID_LENGTH } from "./main";
-import {readBlob} from "../share/read_blob";
+import { readBlob } from "../share/read_blob";
 
 type Callback = (response: ResponseArrayBuffer) => void;
 export class Binder {
@@ -18,8 +18,7 @@ export class Binder {
     private income: Observable<ResponseArrayBuffer>
   ) {
     income.subscribe(async (ab) => {
-
-      const requestID = await  readBlob(ab.slice(0, REQUEST_ID_LENGTH));
+      const requestID = await readBlob(ab.slice(0, REQUEST_ID_LENGTH));
       const body = ab.slice(REQUEST_ID_LENGTH) as ResponseArrayBuffer;
       this.onResponse(requestID, body);
     });
@@ -28,10 +27,14 @@ export class Binder {
   public onRequest(request: RequestArrayBuffer): Promise<ResponseArrayBuffer> {
     return new Promise(async (resolve) => {
       const requestID = createRequestID();
-      console.log("randomUUID byte length: " , new TextEncoder().encode(requestID).length)
-      const ab =  Uint8Array.of(...new TextEncoder().encode(requestID),
-          ...new Uint8Array(request)
-          )
+      console.log(
+        "randomUUID byte length: ",
+        new TextEncoder().encode(requestID).length
+      );
+      const ab = Uint8Array.of(
+        ...new TextEncoder().encode(requestID),
+        ...new Uint8Array(request)
+      );
       const callback: Callback = (req) => resolve(req);
       this.map.set(requestID, callback);
       this.outgoing.next(ab);
@@ -46,6 +49,6 @@ export class Binder {
 }
 
 function createRequestID(): string {
-  console.log("randomUUID string length: ", randomUUID().length)
+  console.log("randomUUID string length: ", randomUUID().length);
   return randomUUID();
 }

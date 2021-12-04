@@ -12,7 +12,6 @@ import { requestObjectToBlob } from "../share/request_to_blob";
 import { blobToResponseObject } from "../share/blob_to_response";
 import { Observable, Subject } from "rxjs";
 
-
 export function setUpEntrance(
   outgoing: Subject<RequestArrayBuffer>,
   income: Observable<ResponseArrayBuffer>
