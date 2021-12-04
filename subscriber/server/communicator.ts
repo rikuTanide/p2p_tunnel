@@ -4,7 +4,6 @@ import { WebSocket } from "ws";
 import * as Puppeteer from "puppeteer";
 import {
   RequestArrayBuffer,
-  Requester,
   ResponseArrayBuffer,
 } from "../share/types";
 import { Observable, Subject, Subscribable } from "rxjs";

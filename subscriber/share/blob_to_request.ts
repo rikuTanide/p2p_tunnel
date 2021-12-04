@@ -1,5 +1,6 @@
 import { Headline, Headers, RequestObject } from "./types";
 import { REQUEST_ID_LENGTH } from "../server/consts";
+import {toText} from "./util";
 
 export function blobToRequestObjects(
   requestAB: ArrayBuffer
@@ -42,11 +43,6 @@ export function blobToRequestObjects(
       body,
     },
   };
-}
-
-function toText(ab: ArrayBuffer): string {
-  const decoder = new TextDecoder();
-  return decoder.decode(ab);
 }
 
 function decodeHeadline(ab: ArrayBuffer): Headline {

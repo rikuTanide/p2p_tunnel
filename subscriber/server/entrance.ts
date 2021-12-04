@@ -8,9 +8,8 @@ import {
   ResponseArrayBuffer,
   RequestArrayBuffer,
 } from "../share/types";
-import { requestObjectToBlob } from "../share/request_to_blob";
-import { blobToResponseObject } from "../share/blob_to_response";
 import { Observable, Subject } from "rxjs";
+import {arrayBufferToResponseObject} from "../share/blob_to_response";
 
 export function setUpEntrance(
   outgoing: Subject<RequestArrayBuffer>,
@@ -30,10 +29,12 @@ export function setUpEntrance(
       headers,
       body,
     };
-    const response = blobToResponseObject(
-      await binder.onRequest(requestObjects)
+    await binder.onRequest(requestObjects)
+
+    const response = arrayBufferToResponseObject(
+        await binder.onRequest(requestObjects)
     );
-    Object.entries(response.headers).map(([k, v]) => res.setHeader(k, v));
+    // Object.entries(response.headers).map(([k, v]) => res.setHeader(k, v));
     // res.send(response.body);
     // res.end();
   });

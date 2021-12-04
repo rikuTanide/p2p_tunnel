@@ -5,7 +5,6 @@ import { RequestObject } from "../../subscriber/share/types";
 
 const fs = require("fs");
 
-async function proxy(requestID: string, requestObject: any) {}
 
 export async function setUp() {
   const app = express();
@@ -25,7 +24,7 @@ export async function setUp() {
       return;
     }
     const { requestID, request } = requestObject;
-    const response = await proxy(requestID, requestObject);
+    const response = await proxy(requestID, request);
     // const resAB = await responseToBlob(response);
     // res.send(resAB);
     res.end();

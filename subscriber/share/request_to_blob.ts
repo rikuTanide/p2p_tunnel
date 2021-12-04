@@ -11,14 +11,12 @@ export function requestObjectToBlob(
   const headers = new TextEncoder().encode(
     JSON.stringify(requestObjects.headers)
   );
-  console.log(headline.length, headers.length, body.byteLength);
   const splitters = new Uint32Array([
     headline.length,
     headers.length,
     body.byteLength,
   ]).buffer;
 
-  console.log(new Uint8Array(splitters).buffer);
 
   return Uint8Array.of(
     ...new TextEncoder().encode(requestID),

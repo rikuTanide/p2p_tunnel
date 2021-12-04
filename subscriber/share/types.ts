@@ -15,12 +15,7 @@ export interface Headline {
 }
 
 export interface ResponseObject {
+  status: number;
   headers: Headers;
   body: ArrayBuffer;
 }
-
-// binder
-export type Requester = (
-  requestID: string,
-  request: RequestArrayBuffer
-) => void;
