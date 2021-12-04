@@ -12,6 +12,7 @@
     "@types/node-fetch": "2",
     "express": "^4.17.1",
     "express-ws": "^5.0.2",
+    "flags": "^0.1.3",
     "node-fetch": "2",
     "puppeteer": "^12.0.1",
     "rxjs": "^7.4.0",

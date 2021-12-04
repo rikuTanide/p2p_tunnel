@@ -4,7 +4,7 @@ import { WebSocket } from "ws";
 import * as Puppeteer from "puppeteer";
 import { RequestArray, ResponseArray } from "../share/types";
 import { Observable, Subject } from "rxjs";
-import {AddressInfo} from "net";
+import { AddressInfo } from "net";
 
 const fs = require("fs");
 
@@ -25,17 +25,18 @@ class WebSocketBinder {
 
 export async function setUpCommunicator(
   income: Observable<RequestArray>,
-  outgoing: Subject<ResponseArray>
+  outgoing: Subject<ResponseArray>,
+  publisherPeerID: string
 ) {
   const wsb = new WebSocketBinder();
 
   const app = expressWs(express()).app;
   app.use("/", express.static("./web/dist"));
   app.ws("/ws", (ws, req) => onWsOpen(ws, req, wsb, outgoing));
-  const server = app.listen( );
+  const server = app.listen();
   const port = (server.address() as AddressInfo).port;
 
-  await openCommunicatorPage(port);
+  await openCommunicatorPage(port, publisherPeerID);
 
   income.subscribe((blob) => {
     wsb.sendByWebSockets(blob);
@@ -55,14 +56,12 @@ function onWsOpen(
   ws.on("close", () => wsb.unlink(ws));
 }
 
-async function openCommunicatorPage(port: number) {
+async function openCommunicatorPage(port: number, publisherPeerID: string) {
   const browser = await Puppeteer.launch();
   const page = await browser.newPage();
   const url = new URL("http://localhost/");
   url.port = port.toString();
-  const publisherPeerID = fs.readFileSync("..\\publisher_peer_id.txt", {
-    encoding: "utf-8",
-  });
+
   url.searchParams.set("publisher_peer_id", publisherPeerID);
   await page.goto(url.toString());
 }

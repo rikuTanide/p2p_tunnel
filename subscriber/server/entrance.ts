@@ -11,7 +11,9 @@ import { Observable, Subject } from "rxjs";
 
 export function setUpEntrance(
   outgoing: Subject<RequestArray>,
-  income: Observable<ResponseArray>
+  income: Observable<ResponseArray>,
+  host: string,
+  port: number
 ) {
   const binder = new Binder(outgoing, income);
   const app = express();
@@ -32,7 +34,7 @@ export function setUpEntrance(
     res.write(response.body);
     res.end();
   });
-  app.listen(8000);
+  app.listen(port, host);
 }
 
 function getHeadline(req: express.Request): Headline {
