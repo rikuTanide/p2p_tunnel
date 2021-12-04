@@ -28,6 +28,7 @@ export class Binder {
   public onRequest(request: RequestArrayBuffer): Promise<ResponseArrayBuffer> {
     return new Promise(async (resolve) => {
       const requestID = createRequestID();
+      console.log("randomUUID byte length: " , new TextEncoder().encode(requestID).length)
       const ab =  Uint8Array.of(...new TextEncoder().encode(requestID),
           ...new Uint8Array(request)
           )
@@ -45,5 +46,6 @@ export class Binder {
 }
 
 function createRequestID(): string {
+  console.log("randomUUID string length: ", randomUUID().length)
   return randomUUID();
 }

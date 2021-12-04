@@ -24,6 +24,9 @@ export function setUpEntrance(
     const headers = getHeaders(req);
     const body = await getBody(req);
 
+    res.write("tmp");
+    res.end();
+
     const requestObjects: RequestObject = {
       headline,
       headers,
@@ -32,8 +35,8 @@ export function setUpEntrance(
     const requestBlob = requestObjectToBlob(requestObjects);
     const response = blobToResponseObject(await binder.onRequest(requestBlob));
     Object.entries(response.headers).map(([k, v]) => res.setHeader(k, v));
-    res.write(response.body);
-    res.end();
+    // res.write(response.body);
+    // res.end();
   });
   app.listen(8000);
 }

@@ -1,15 +1,14 @@
 {
-  "name": "subscriber",
+  "name": "publisher",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
     "main": "node_modules\\.bin\\nodemon",
     "prettier": "prettier \"./**/*.(ts|tsx)\" --write",
-    "build": "node_modules\\.bin\\webpack watch"
+    "build": "node_modules\\.bin\\webpack serve"
   },
   "dependencies": {
-    "crypto-js": "^4.1.1",
     "express": "^4.17.1",
     "express-ws": "^5.0.2",
     "puppeteer": "^12.0.1",
