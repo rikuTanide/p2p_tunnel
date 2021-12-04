@@ -6,7 +6,7 @@ import { responseObjectToArrayBuffer } from "../../subscriber/share/response_to_
 import {
   RequestObject,
   ResponseObject,
-  ResponseArrayBuffer,
+  ResponseArray,
 } from "../../subscriber/share/types";
 import * as SharedTypes from "../../subscriber/share/types";
 import fetch, { Headers, HeadersInit } from "node-fetch";
@@ -49,7 +49,7 @@ export async function setUp() {
 function readBodyAB(
   req: express.Request,
   res: express.Response
-): Promise<ArrayBuffer> {
+): Promise<Uint8Array> {
   return new Promise((resolve) => {
     const body: number[] = [];
     req.on("data", (data) => {
@@ -65,7 +65,7 @@ function readBodyAB(
 async function proxy(
   requestID: string,
   request: RequestObject
-): Promise<ResponseArrayBuffer> {
+): Promise<ResponseArray> {
   const url = new URL(request.headline.url, "http://localhost:3000/");
 
   const res = await fetch(url.toString(), {

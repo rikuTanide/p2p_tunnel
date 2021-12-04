@@ -5,14 +5,14 @@ import {
   Headline,
   Headers,
   ResponseObject,
-  ResponseArrayBuffer,
-  RequestArrayBuffer,
+  ResponseArray,
+  RequestArray,
 } from "../share/types";
 import { Observable, Subject } from "rxjs";
 
 export function setUpEntrance(
-  outgoing: Subject<RequestArrayBuffer>,
-  income: Observable<ResponseArrayBuffer>
+  outgoing: Subject<RequestArray>,
+  income: Observable<ResponseArray>
 ) {
   const binder = new Binder(outgoing, income);
   const app = express();

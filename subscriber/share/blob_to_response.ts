@@ -2,13 +2,13 @@ import {
   Headers,
   Headline,
   RequestObject,
-  ResponseArrayBuffer,
+  ResponseArray,
   ResponseObject,
 } from "./types";
 import { REQUEST_ID_LENGTH } from "../server/consts";
 import { toText } from "./util";
 
-export function arrayBufferToResponseObject(ab: ResponseArrayBuffer): {
+export function arrayBufferToResponseObject(ab: ResponseArray): {
   requestID: string;
   response: ResponseObject;
 } {
@@ -50,7 +50,7 @@ export function arrayBufferToResponseObject(ab: ResponseArrayBuffer): {
   };
 }
 
-function decodeHeaders(ab: ArrayBuffer): Headers {
-  const json = toText(ab);
+function decodeHeaders(array: Uint8Array): Headers {
+  const json = toText(array);
   return JSON.parse(json);
 }

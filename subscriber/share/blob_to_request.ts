@@ -3,7 +3,7 @@ import { REQUEST_ID_LENGTH } from "../server/consts";
 import { toText } from "./util";
 
 export function blobToRequestObjects(
-  requestAB: ArrayBuffer
+  requestAB: Uint8Array
 ): { requestID: string; request: RequestObject } | undefined {
   const requestID = toText(requestAB.slice(0, REQUEST_ID_LENGTH));
 
@@ -45,12 +45,12 @@ export function blobToRequestObjects(
   };
 }
 
-function decodeHeadline(ab: ArrayBuffer): Headline {
-  const json = toText(ab);
+function decodeHeadline(array: Uint8Array): Headline {
+  const json = toText(array);
   return JSON.parse(json);
 }
 
-function decodeHeaders(ab: ArrayBuffer): Headers {
-  const json = toText(ab);
+function decodeHeaders(array: Uint8Array): Headers {
+  const json = toText(array);
   return JSON.parse(json);
 }

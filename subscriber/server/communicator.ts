@@ -2,7 +2,7 @@ import * as expressWs from "express-ws";
 import * as express from "express";
 import { WebSocket } from "ws";
 import * as Puppeteer from "puppeteer";
-import { RequestArrayBuffer, ResponseArrayBuffer } from "../share/types";
+import { RequestArray, ResponseArray } from "../share/types";
 import { Observable, Subject, Subscribable } from "rxjs";
 const fs = require("fs");
 
@@ -12,7 +12,7 @@ class WebSocketBinder {
   public register(ws: WebSocket) {
     this.set.add(ws);
   }
-  public async sendByWebSockets(blob: RequestArrayBuffer) {
+  public async sendByWebSockets(blob: RequestArray) {
     for (const ws of this.set) ws.send(blob);
   }
 
@@ -22,8 +22,8 @@ class WebSocketBinder {
 }
 
 export async function setUpCommunicator(
-  income: Observable<RequestArrayBuffer>,
-  outgoing: Subject<ResponseArrayBuffer>
+  income: Observable<RequestArray>,
+  outgoing: Subject<ResponseArray>
 ) {
   const wsb = new WebSocketBinder();
 
@@ -43,11 +43,11 @@ function onWsOpen(
   ws: WebSocket,
   req: express.Request,
   wsb: WebSocketBinder,
-  outgoing: Subject<ResponseArrayBuffer>
+  outgoing: Subject<ResponseArray>
 ) {
   wsb.register(ws);
   ws.on("message", (msg: ArrayBuffer) => {
-    outgoing.next(msg);
+    outgoing.next( new Uint8Array(msg));
   });
   ws.on("close", () => wsb.unlink(ws));
 }

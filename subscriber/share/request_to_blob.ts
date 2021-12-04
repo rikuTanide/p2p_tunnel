@@ -1,9 +1,9 @@
-import { RequestArrayBuffer, RequestObject } from "./types";
+import { RequestArray, RequestObject } from "./types";
 
 export function requestObjectToBlob(
   requestID: string,
   requestObjects: RequestObject
-): RequestArrayBuffer {
+): RequestArray {
   const body = requestObjects.body;
   const headline = new TextEncoder().encode(
     JSON.stringify(requestObjects.headline)

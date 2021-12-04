@@ -1,5 +1,5 @@
-export type RequestArrayBuffer = ArrayBuffer;
-export type ResponseArrayBuffer = ArrayBuffer;
+export type RequestArray = Uint8Array;
+export type ResponseArray = Uint8Array;
 
 export type Headers = { [key: string]: string[] };
 

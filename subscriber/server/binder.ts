@@ -1,8 +1,8 @@
 import { randomUUID } from "crypto";
 import {
-  RequestArrayBuffer,
+  RequestArray,
   RequestObject,
-  ResponseArrayBuffer,
+  ResponseArray,
   ResponseObject,
 } from "../share/types";
 import * as SharedTypes from "../share/types";
@@ -19,8 +19,8 @@ type Callback = (response: ResponseObject) => void;
 export class Binder {
   private map = new Map<string, Callback>();
   constructor(
-    private outgoing: Subject<RequestArrayBuffer>,
-    private income: Observable<ResponseArrayBuffer>
+    private outgoing: Subject<RequestArray>,
+    private income: Observable<ResponseArray>
   ) {
     income.subscribe(async (ab) => {
       this.onResponse(ab);
@@ -42,7 +42,7 @@ export class Binder {
     });
   }
 
-  private onResponse(ab: ResponseArrayBuffer) {
+  private onResponse(ab: ResponseArray) {
     const { requestID, response } = arrayBufferToResponseObject(ab);
     const callback = this.map.get(requestID);
     if (!callback) return;
