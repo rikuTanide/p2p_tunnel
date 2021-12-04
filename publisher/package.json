@@ -4,9 +4,10 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "main": "node_modules\\.bin\\nodemon",
+    "watch": "node_modules/.bin/nodemon",
+    "main": "node_modules/.bin/ts-node server/main.ts",
     "prettier": "prettier \"./**/*.(ts|tsx)\" --write",
-    "build": "node_modules\\.bin\\webpack"
+    "build": "node_modules/.bin/webpack"
   },
   "dependencies": {
     "@types/node-fetch": "2",

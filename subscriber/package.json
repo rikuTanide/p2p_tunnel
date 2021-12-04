@@ -4,10 +4,10 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "watch": "node_modules\\.bin\\nodemon",
-    "main": "node_modules\\.bin\\ts-node",
+    "watch": "node_modules/.bin/nodemon",
+    "main": "node_modules/.bin/ts-node server/main.ts",
     "prettier": "prettier \"./**/*.(ts|tsx)\" --write",
-    "build": "node_modules\\.bin\\webpack watch"
+    "build": "node_modules/.bin/webpack watch"
   },
   "dependencies": {
     "crypto-js": "^4.1.1",

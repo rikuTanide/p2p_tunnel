@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "main": "node_modules\\.bin\\nodemon",
+    "main": "node_modules/.bin/nodemon",
     "prettier": "prettier \"./**/*.(ts|tsx)\" --write"
   },
   "dependencies": {
