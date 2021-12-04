@@ -2,15 +2,7 @@ import * as express from "express";
 import * as expressWs from "express-ws";
 import * as Puppeteer from "puppeteer";
 import * as _ws from "ws";
-
-function setUpListener() {
-  const app = express();
-  app.get("/", (req, res) => {
-    res.write("hello");
-    res.end();
-  });
-  app.listen(8000);
-}
+import { setUpListener } from "./entrance";
 
 async function setUpCommunicator() {
   const app = expressWs(express()).app;
@@ -24,7 +16,6 @@ async function setUpCommunicator() {
 function onWsOpen(ws: _ws.WebSocket, req: express.Request) {
   ws.on("message", (msg) => {
     console.log(msg);
-    process.exit(0);
   });
 }
 
@@ -34,5 +25,5 @@ async function openCommunicatorPage() {
   await page.goto("http://localhost:8001/");
 }
 
-// setUpListener();
-setUpCommunicator();
+setUpListener();
+// setUpCommunicator();
