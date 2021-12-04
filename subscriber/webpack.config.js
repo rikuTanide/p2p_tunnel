@@ -23,9 +23,5 @@ module.exports = {
     ],
     resolve: {
         extensions: ['.tsx', '.ts', '.js']
-    },
-    devServer: {
-        host: 'localhost',
-        port: 8080
-    },
+    }
 };

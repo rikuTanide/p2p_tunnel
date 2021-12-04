@@ -5,6 +5,9 @@
    - それを表示できるようにする
    - puppeteerで起動
    - WebSocketをつなぐ
+     - listen
+     - ドメイン決め打ち subscribe
+     - ドメイン可変
  - httpの転送
  - 引数でWebRTCのを取得
  - WebRTCで接続
