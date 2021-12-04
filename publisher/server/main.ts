@@ -9,14 +9,11 @@ import {
   ResponseObject,
 } from "../../subscriber/share/types";
 import fetch, { Headers, HeadersInit } from "node-fetch";
+import {AddressInfo} from "net";
 
 const fs = require("fs");
 
-export async function setUp() {
-  const host = "localhost";
-  const port = "3000";
-  const originalHost = `${host}:${port}`;
-
+export async function setUp(originalHost: string) {
   const app = express();
   app.get("/connection_id", (req, res) => {
     const id = (req.query as { id: string }).id;
@@ -41,11 +38,12 @@ export async function setUp() {
     res.end();
   });
   app.use("/", express.static("./web/dist"));
-  await app.listen(8002);
+  const server = app.listen();
+  const port = (server.address() as AddressInfo).port;
 
   const browser = await Puppeteer.launch();
   const page = await browser.newPage();
-  await page.goto("http://localhost:8002/");
+  await page.goto(`http://localhost:${port}/`);
 }
 
 function readBodyAB(
@@ -110,4 +108,8 @@ function toFetchHeaders(
   return res;
 }
 
-setUp();
+const host = "localhost";
+const port = "3000";
+const originalHost = `${host}:${port}`;
+
+setUp(originalHost);
