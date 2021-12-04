@@ -1,18 +1,20 @@
-import { RequestObject } from "./types";
+import { Headline, Headers, RequestObject } from "./types";
+import { REQUEST_ID_LENGTH } from "../server/consts";
 
-async function blobToRequestObjects(
-  requestBlob: Blob
-): Promise<RequestObject | undefined> {
+export function blobToRequestObjects(
+  requestAB: ArrayBuffer
+): { requestID: string; request: RequestObject } | undefined {
+  const requestID = toText(requestAB.slice(0, REQUEST_ID_LENGTH));
+
   const splittersLength = (32 / 8) * 3;
-  const splittersBlob = requestBlob.slice(0, splittersLength);
-  const splitters = new Uint32Array(await splittersBlob.arrayBuffer());
+  const splittersBlob = requestAB.slice(
+    REQUEST_ID_LENGTH,
+    REQUEST_ID_LENGTH + splittersLength
+  );
+  const splitters = new Uint32Array(new Uint8Array(splittersBlob).buffer);
   const headlineLength = splitters[0];
   const headersLength = splitters[1];
   const bodyLength = splitters[2];
-  console.log("response");
-  console.log(headlineLength);
-  console.log(headersLength);
-  console.log(bodyLength);
   if (
     headlineLength === undefined ||
     headersLength === undefined ||
@@ -20,30 +22,39 @@ async function blobToRequestObjects(
   ) {
     return;
   }
-  const headline = await decodeHeadline(
-    requestBlob.slice(splittersLength, splittersLength + headlineLength)
+  const splitterStart = REQUEST_ID_LENGTH;
+  const headlineStart = splitterStart + splittersLength;
+  const headersStart = headlineStart + headlineLength;
+  const bodyStart = headersStart + headersLength;
+  const headline = decodeHeadline(
+    requestAB.slice(headlineStart, headlineStart + headlineLength)
   );
-  const headers = await decodeHeaders(
-    requestBlob.slice(
-      splittersLength + headlineLength,
-      splittersLength + headlineLength + headersLength
-    )
+  const headers = decodeHeaders(
+    requestAB.slice(headersStart, headersStart + headersLength)
   );
-  const body = await decodeBody(
-    requestBlob.slice(splittersLength + headlineLength + headersLength)
-  );
-  console.log("end");
-  return undefined;
+  const body = requestAB.slice(bodyStart);
+
+  return {
+    requestID: requestID,
+    request: {
+      headline,
+      headers,
+      body,
+    },
+  };
 }
 
-async function decodeHeadline(blob: Blob) {
-  console.log(await blob.arrayBuffer());
+function toText(ab: ArrayBuffer): string {
+  const decoder = new TextDecoder();
+  return decoder.decode(ab);
 }
 
-async function decodeHeaders(blob: Blob) {
-  console.log(await blob.arrayBuffer());
+function decodeHeadline(ab: ArrayBuffer): Headline {
+  const json = toText(ab);
+  return JSON.parse(json);
 }
 
-async function decodeBody(blob: Blob) {
-  console.log(await blob.arrayBuffer());
+function decodeHeaders(ab: ArrayBuffer): Headers {
+  const json = toText(ab);
+  return JSON.parse(json);
 }

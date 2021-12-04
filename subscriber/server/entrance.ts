@@ -23,18 +23,18 @@ export function setUpEntrance(
     const headers = getHeaders(req);
     const body = await getBody(req);
 
-    res.write("tmp");
-    res.end();
+    res.send("tmp");
 
     const requestObjects: RequestObject = {
       headline,
       headers,
       body,
     };
-    const requestBlob = requestObjectToBlob(requestObjects);
-    const response = blobToResponseObject(await binder.onRequest(requestBlob));
+    const response = blobToResponseObject(
+      await binder.onRequest(requestObjects)
+    );
     Object.entries(response.headers).map(([k, v]) => res.setHeader(k, v));
-    // res.write(response.body);
+    // res.send(response.body);
     // res.end();
   });
   app.listen(8000);
@@ -72,12 +72,10 @@ async function getBody(req: express.Request): Promise<ArrayBuffer> {
     const body = new Uint8Array(length);
     let index = 0;
     req.on("data", (data: Buffer) => {
-      console.log("data", data);
       data.copy(body, index, 0);
       index += data.length;
     });
     req.on("end", () => {
-      console.log("body len", body.length);
       resolve(body);
     });
   });

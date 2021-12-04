@@ -1,6 +1,10 @@
 import { DataConnection } from "skyway-js";
 const Peer = require("skyway-js");
 
+const publisherPeerID = new URLSearchParams(document.location.search).get(
+  "publisher_peer_id"
+)!;
+
 let con: DataConnection | undefined;
 
 function createUrl() {
@@ -22,7 +26,7 @@ ws.addEventListener("message", (e) => {
 
 const peer = new Peer({ key: "b7248a9f-7245-4c45-9802-2bfcfbe964d4" });
 peer.on("open", () => {
-  con = peer.connect("Zq7nWY3x43rKarqQ");
+  con = peer.connect(publisherPeerID);
   con!.on("message", (data) => {
     ws.send(data);
   });

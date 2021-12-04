@@ -8,6 +8,7 @@ import {
   ResponseArrayBuffer,
 } from "../share/types";
 import { Observable, Subject, Subscribable } from "rxjs";
+const fs = require("fs");
 
 class WebSocketBinder {
   private set: Set<WebSocket> = new Set();
@@ -50,7 +51,6 @@ function onWsOpen(
 ) {
   wsb.register(ws);
   ws.on("message", (msg: ArrayBuffer) => {
-    console.log("typeof message", typeof msg);
     outgoing.next(msg);
   });
   ws.on("close", () => wsb.unlink(ws));
@@ -59,5 +59,10 @@ function onWsOpen(
 async function openCommunicatorPage() {
   const browser = await Puppeteer.launch();
   const page = await browser.newPage();
-  await page.goto("http://localhost:8001/");
+  const url = new URL("http://localhost:8001/");
+  const publisherPeerID = fs.readFileSync("..\\publisher_peer_id.txt", {
+    encoding: "utf-8",
+  });
+  url.searchParams.set("publisher_peer_id", publisherPeerID);
+  await page.goto(url.toString());
 }

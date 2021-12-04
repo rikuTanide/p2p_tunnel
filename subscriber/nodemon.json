@@ -1,5 +1,5 @@
 {
-  "watch": ["server/"],
+  "watch": ["server/", "share/", "../publisher/server/", "../../publisher_peer_id.txt"],
   "ext": "ts",
   "exec": "ts-node server\\main.ts"
 }

@@ -7,8 +7,10 @@ import {
   ResponseObject,
 } from "../share/types";
 import { Observable, Subject } from "rxjs";
-import { REQUEST_ID_LENGTH } from "./main";
 import { readBlob } from "../share/read_blob";
+import { requestObjectToBlob } from "../share/request_to_blob";
+import { REQUEST_ID_LENGTH } from "./consts";
+import { blobToRequestObjects } from "../share/blob_to_request";
 
 type Callback = (response: ResponseArrayBuffer) => void;
 export class Binder {
@@ -24,17 +26,11 @@ export class Binder {
     });
   }
 
-  public onRequest(request: RequestArrayBuffer): Promise<ResponseArrayBuffer> {
+  public onRequest(request: RequestObject): Promise<ResponseArrayBuffer> {
     return new Promise(async (resolve) => {
       const requestID = createRequestID();
-      console.log(
-        "randomUUID byte length: ",
-        new TextEncoder().encode(requestID).length
-      );
-      const ab = Uint8Array.of(
-        ...new TextEncoder().encode(requestID),
-        ...new Uint8Array(request)
-      );
+      console.log(requestID);
+      const ab = requestObjectToBlob(requestID, request);
       const callback: Callback = (req) => resolve(req);
       this.map.set(requestID, callback);
       this.outgoing.next(ab);
@@ -49,6 +45,5 @@ export class Binder {
 }
 
 function createRequestID(): string {
-  console.log("randomUUID string length: ", randomUUID().length);
   return randomUUID();
 }
