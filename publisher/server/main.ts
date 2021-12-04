@@ -1,8 +1,7 @@
 import * as Puppeteer from "puppeteer";
 import * as express from "express";
 import { blobToRequestObjects } from "../../subscriber/share/blob_to_request";
-import { arrayBufferToResponseObject } from "../../subscriber/share/blob_to_response";
-import { responseObjectToArrayBuffer } from "../../subscriber/share/response_to_blob";
+import { responseObjectToBlob } from "../../subscriber/share/response_to_blob";
 import {
   RequestObject,
   ResponseObject,
@@ -77,7 +76,7 @@ async function proxy(
     headers: toCarryHeaders(res.headers),
     body: new Uint8Array(await res.arrayBuffer()),
   };
-  return responseObjectToArrayBuffer(requestID, responseObject);
+  return responseObjectToBlob(requestID, responseObject);
 }
 
 function toCarryHeaders(headers: Headers) {

@@ -8,7 +8,7 @@ import {
 import { REQUEST_ID_LENGTH } from "../server/consts";
 import { toText } from "./util";
 
-export function arrayBufferToResponseObject(ab: ResponseArray): {
+export function blobToResponseObject(ab: ResponseArray): {
   requestID: string;
   response: ResponseObject;
 } {

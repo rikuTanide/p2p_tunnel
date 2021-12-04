@@ -1,6 +1,6 @@
 import { ResponseObject } from "./types";
 
-export function responseObjectToArrayBuffer(
+export function responseObjectToBlob(
   requestID: string,
   responseObject: ResponseObject
 ) {

@@ -16,3 +16,4 @@
  - console.log() をきれいにする。
  - blob_to の名前を変える
  - hostを書き換える
+ - import綺麗にする
