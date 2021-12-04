@@ -1,0 +1,10 @@
+ - subscriberをブラウザで表示
+ - 転送用のpuppeteerを起動
+   - webを作る
+   - buildする
+   - それを表示できるようにする
+   - puppeteerで起動
+   - WebSocketをつなぐ
+ - httpの転送
+ - 引数でWebRTCのを取得
+ - WebRTCで接続
