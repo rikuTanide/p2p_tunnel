@@ -1,10 +1,16 @@
 import * as Puppeteer from "puppeteer";
 import * as express from "express";
 import { blobToRequestObjects } from "../../subscriber/share/blob_to_request";
-import { RequestObject } from "../../subscriber/share/types";
-
+import { arrayBufferToResponseObject } from "../../subscriber/share/blob_to_response";
+import { responseObjectToArrayBuffer } from "../../subscriber/share/response_to_blob";
+import {
+  RequestObject,
+  ResponseObject,
+  ResponseArrayBuffer,
+} from "../../subscriber/share/types";
+import * as SharedTypes from "../../subscriber/share/types";
+import fetch, { Headers, HeadersInit } from "node-fetch";
 const fs = require("fs");
-
 
 export async function setUp() {
   const app = express();
@@ -12,9 +18,10 @@ export async function setUp() {
     const id = (req.query as { id: string }).id;
     fs.writeFileSync("..\\publisher_peer_id.txt", id);
     console.log("ready");
+    res.end();
   });
   app.post("/on_request", async (req, res) => {
-    console.log("ooo");
+    console.log("on request");
     const bodyAB = await readBodyAB(req, res);
     const requestObject = await blobToRequestObjects(bodyAB);
     if (!requestObject) {
@@ -25,8 +32,10 @@ export async function setUp() {
     }
     const { requestID, request } = requestObject;
     const response = await proxy(requestID, request);
-    // const resAB = await responseToBlob(response);
-    // res.send(resAB);
+    console.log(response.byteLength);
+    res.status(200);
+    res.setHeader("content-length", response.byteLength);
+    res.write(new Uint8Array(response));
     res.end();
   });
   app.use("/", express.static("./web/dist"));
@@ -48,10 +57,47 @@ function readBodyAB(
     });
     req.on("end", () => {
       const ab = new Uint8Array(body);
-      res.end();
       resolve(ab);
     });
   });
+}
+
+async function proxy(
+  requestID: string,
+  request: RequestObject
+): Promise<ResponseArrayBuffer> {
+  const url = new URL(request.headline.url, "http://localhost:3000/");
+
+  const res = await fetch(url.toString(), {
+    method: request.headline.method,
+    headers: toFetchHeaders(request.headers),
+    compress: false,
+    body: request.body.byteLength === 0 ? undefined : request.body,
+  });
+  const responseObject: ResponseObject = {
+    status: res.status,
+    headers: toCarryHeaders(res.headers),
+    body: await res.arrayBuffer(),
+  };
+  return responseObjectToArrayBuffer(requestID, responseObject);
+}
+
+function toCarryHeaders(headers: Headers) {
+  const res: SharedTypes.Headers = {};
+  for (const [key, value] of headers.entries()) {
+    res[key] = [value];
+  }
+  return res;
+}
+
+function toFetchHeaders(headers: SharedTypes.Headers): HeadersInit {
+  const res: string[][] = [];
+  for (const [key, values] of Object.entries(headers)) {
+    for (const value of values) {
+      res.push([key, value]);
+    }
+  }
+  return res;
 }
 
 setUp();

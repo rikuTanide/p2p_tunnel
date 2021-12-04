@@ -11,11 +11,11 @@ export function responseObjectToArrayBuffer(
 
   const splitters = new Uint32Array([headers.length, body.byteLength]).buffer;
 
-  return Uint8Array.of(
+  return Uint8Array.from([
     ...new TextEncoder().encode(requestID),
     ...new Uint8Array(new Uint32Array([responseObject.status]).buffer),
     ...new Uint8Array(splitters),
     ...headers,
-    ...new Uint8Array(body)
-  );
+    ...new Uint8Array(body),
+  ]);
 }

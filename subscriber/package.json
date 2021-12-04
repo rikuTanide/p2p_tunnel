@@ -9,7 +9,6 @@
     "build": "node_modules\\.bin\\webpack watch"
   },
   "dependencies": {
-    "@types/node-fetch": "2",
     "crypto-js": "^4.1.1",
     "express": "^4.17.1",
     "express-ws": "^5.0.2",
@@ -19,6 +18,7 @@
     "skyway-js": "^4.4.3"
   },
   "devDependencies": {
+    "@types/node-fetch": "2",
     "@types/express": "^4.17.13",
     "@types/express-ws": "^3.0.1",
     "html-webpack-plugin": "^5.5.0",

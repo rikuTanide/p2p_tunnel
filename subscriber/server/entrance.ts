@@ -26,11 +26,11 @@ export function setUpEntrance(
       headers,
       body,
     };
-    await binder.onRequest(requestObjects);
-
     const response = await binder.onRequest(requestObjects);
-    Object.entries(response.headers).map(([k, v]) => res.setHeader(k, v));
     res.status(response.status);
+    console.log(Object.keys(response.headers));
+    Object.entries(response.headers).map(([k, v]) => res.setHeader(k, v));
+    res.setHeader("content-length", response.body.byteLength);
     res.write(new Uint8Array(response.body));
     res.end();
   });
@@ -62,7 +62,7 @@ async function getBody(req: express.Request): Promise<ArrayBuffer> {
   return new Promise((resolve, reject) => {
     const contentLengthStr = req.headers["content-length"];
     if (contentLengthStr === undefined) {
-      reject();
+      resolve(new Uint8Array(0));
       return;
     }
     const length = parseInt(contentLengthStr, 10);

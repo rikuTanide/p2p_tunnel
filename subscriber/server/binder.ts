@@ -15,7 +15,7 @@ import { responseObjectToArrayBuffer } from "../share/response_to_blob";
 import fetch, { Headers } from "node-fetch";
 import { arrayBufferToResponseObject } from "../share/blob_to_response";
 
-type Callback = (response: ResponseArrayBuffer) => void;
+type Callback = (response: ResponseObject) => void;
 export class Binder {
   private map = new Map<string, Callback>();
   constructor(
@@ -23,9 +23,7 @@ export class Binder {
     private income: Observable<ResponseArrayBuffer>
   ) {
     income.subscribe(async (ab) => {
-      const requestID = await readBlob(ab.slice(0, REQUEST_ID_LENGTH));
-      const body = ab.slice(REQUEST_ID_LENGTH) as ResponseArrayBuffer;
-      this.onResponse(requestID, body);
+      this.onResponse(ab);
     });
   }
 
@@ -38,45 +36,18 @@ export class Binder {
         reject();
         return;
       }
-      const res = (await this.proxy(requestID, resAb.request)).response;
-      resolve(res);
-      // const callback: Callback = (req) => resolve(req);
-      // this.map.set(requestID, callback);
-      // this.outgoing.next(ab);
+      const callback: Callback = (req) => resolve(req);
+      this.map.set(requestID, callback);
+      this.outgoing.next(ab);
     });
   }
 
-  private onResponse(id: string, response: ResponseArrayBuffer) {
-    const callback = this.map.get(id);
+  private onResponse(ab: ResponseArrayBuffer) {
+    const { requestID, response } = arrayBufferToResponseObject(ab);
+    const callback = this.map.get(requestID);
     if (!callback) return;
+    this.map.delete(requestID);
     callback(response);
-  }
-
-  private async proxy(requestID: string, request: RequestObject) {
-    const url = new URL(request.headline.url, "http://localhost:3000/");
-
-    const res = await fetch(url.toString(), {
-      method: request.headline.method,
-      body: request.body,
-    });
-    const responseObject: ResponseObject = {
-      status: res.status,
-      headers: this.toHeaders(res.headers),
-      body: await res.arrayBuffer(),
-    };
-    const responseArrayBuffer = responseObjectToArrayBuffer(
-      requestID,
-      responseObject
-    );
-    return arrayBufferToResponseObject(responseArrayBuffer);
-  }
-
-  private toHeaders(headers: Headers) {
-    const res: SharedTypes.Headers = {};
-    for (const [key, value] of headers.entries()) {
-      res[key] = [value];
-    }
-    return res;
   }
 }
 

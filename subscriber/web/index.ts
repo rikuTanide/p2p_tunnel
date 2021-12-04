@@ -16,9 +16,6 @@ function createUrl() {
 }
 
 const ws = new WebSocket(createUrl());
-ws.addEventListener("open", () => {
-  ws.send(new Blob(["fuga"]));
-});
 ws.addEventListener("message", (e) => {
   console.log(e.data);
   con!.send(e.data);
@@ -27,7 +24,7 @@ ws.addEventListener("message", (e) => {
 const peer = new Peer({ key: "b7248a9f-7245-4c45-9802-2bfcfbe964d4" });
 peer.on("open", () => {
   con = peer.connect(publisherPeerID);
-  con!.on("message", (data) => {
+  con!.on("data", (data) => {
     ws.send(data);
   });
 });

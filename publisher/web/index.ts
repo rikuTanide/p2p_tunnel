@@ -14,11 +14,14 @@ peer.on("connection", (connection) => {
   });
   connection.on("data", async (message) => {
     console.log(message);
+    console.log("request start");
     const res = await fetch("/on_request", {
       method: "POST",
       body: message,
     });
+    console.log("get response");
     const blob = await res.blob();
+    console.log(blob.size);
     connection.send(blob);
   });
 });

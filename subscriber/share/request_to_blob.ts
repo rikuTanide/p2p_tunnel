@@ -17,11 +17,11 @@ export function requestObjectToBlob(
     body.byteLength,
   ]).buffer;
 
-  return Uint8Array.of(
+  return Uint8Array.from([
     ...new TextEncoder().encode(requestID),
     ...new Uint8Array(splitters),
     ...headline,
     ...headers,
-    ...new Uint8Array(body)
-  );
+    ...new Uint8Array(body),
+  ]);
 }
