@@ -9,7 +9,6 @@ import {
   RequestArrayBuffer,
 } from "../share/types";
 import { Observable, Subject } from "rxjs";
-import {arrayBufferToResponseObject} from "../share/blob_to_response";
 
 export function setUpEntrance(
   outgoing: Subject<RequestArrayBuffer>,
@@ -22,21 +21,18 @@ export function setUpEntrance(
     const headers = getHeaders(req);
     const body = await getBody(req);
 
-    res.send("tmp");
-
     const requestObjects: RequestObject = {
       headline,
       headers,
       body,
     };
-    await binder.onRequest(requestObjects)
+    await binder.onRequest(requestObjects);
 
-    const response = arrayBufferToResponseObject(
-        await binder.onRequest(requestObjects)
-    );
-    // Object.entries(response.headers).map(([k, v]) => res.setHeader(k, v));
-    // res.send(response.body);
-    // res.end();
+    const response = await binder.onRequest(requestObjects);
+    Object.entries(response.headers).map(([k, v]) => res.setHeader(k, v));
+    res.status(response.status);
+    res.write(new Uint8Array(response.body));
+    res.end();
   });
   app.listen(8000);
 }

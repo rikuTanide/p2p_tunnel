@@ -17,7 +17,6 @@ export function requestObjectToBlob(
     body.byteLength,
   ]).buffer;
 
-
   return Uint8Array.of(
     ...new TextEncoder().encode(requestID),
     ...new Uint8Array(splitters),

@@ -1,6 +1,6 @@
 import { Headline, Headers, RequestObject } from "./types";
 import { REQUEST_ID_LENGTH } from "../server/consts";
-import {toText} from "./util";
+import { toText } from "./util";
 
 export function blobToRequestObjects(
   requestAB: ArrayBuffer

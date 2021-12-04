@@ -2,10 +2,7 @@ import * as expressWs from "express-ws";
 import * as express from "express";
 import { WebSocket } from "ws";
 import * as Puppeteer from "puppeteer";
-import {
-  RequestArrayBuffer,
-  ResponseArrayBuffer,
-} from "../share/types";
+import { RequestArrayBuffer, ResponseArrayBuffer } from "../share/types";
 import { Observable, Subject, Subscribable } from "rxjs";
 const fs = require("fs");
 

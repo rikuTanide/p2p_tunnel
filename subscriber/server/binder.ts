@@ -5,15 +5,15 @@ import {
   ResponseArrayBuffer,
   ResponseObject,
 } from "../share/types";
-import * as SharedTypes from "../share/types"
+import * as SharedTypes from "../share/types";
 import { Observable, Subject } from "rxjs";
 import { readBlob } from "../share/read_blob";
 import { requestObjectToBlob } from "../share/request_to_blob";
 import { REQUEST_ID_LENGTH } from "./consts";
 import { blobToRequestObjects } from "../share/blob_to_request";
-import {responseObjectToArrayBuffer} from "../share/response_to_blob";
-import fetch, {Headers} from "node-fetch";
-import {arrayBufferToResponseObject} from "../share/blob_to_response";
+import { responseObjectToArrayBuffer } from "../share/response_to_blob";
+import fetch, { Headers } from "node-fetch";
+import { arrayBufferToResponseObject } from "../share/blob_to_response";
 
 type Callback = (response: ResponseArrayBuffer) => void;
 export class Binder {
@@ -29,16 +29,17 @@ export class Binder {
     });
   }
 
-  public onRequest(request: RequestObject): Promise<ResponseArrayBuffer> {
+  public onRequest(request: RequestObject): Promise<ResponseObject> {
     return new Promise(async (resolve, reject) => {
       const requestID = createRequestID();
       const ab = requestObjectToBlob(requestID, request);
-      const resAb = blobToRequestObjects( ab);
+      const resAb = blobToRequestObjects(ab);
       if (!resAb) {
         reject();
         return;
       }
-      await this.proxy(requestID, resAb.request);
+      const res = (await this.proxy(requestID, resAb.request)).response;
+      resolve(res);
       // const callback: Callback = (req) => resolve(req);
       // this.map.set(requestID, callback);
       // this.outgoing.next(ab);
@@ -52,28 +53,25 @@ export class Binder {
   }
 
   private async proxy(requestID: string, request: RequestObject) {
-    const url = new URL( request.headline.url, "http://localhost:3000/");
+    const url = new URL(request.headline.url, "http://localhost:3000/");
 
-    const res =await fetch(url.toString(), {
+    const res = await fetch(url.toString(), {
       method: request.headline.method,
-      body: request.body
-    })
+      body: request.body,
+    });
     const responseObject: ResponseObject = {
       status: res.status,
       headers: this.toHeaders(res.headers),
-      body : await res.arrayBuffer(),
-    }
+      body: await res.arrayBuffer(),
+    };
     const responseArrayBuffer = responseObjectToArrayBuffer(
-        requestID,
-        responseObject
+      requestID,
+      responseObject
     );
-    console.log(responseArrayBuffer);
-
     return arrayBufferToResponseObject(responseArrayBuffer);
   }
 
   private toHeaders(headers: Headers) {
-    console.log("to header:", headers)
     const res: SharedTypes.Headers = {};
     for (const [key, value] of headers.entries()) {
       res[key] = [value];
