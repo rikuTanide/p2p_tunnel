@@ -1,20 +1,23 @@
 import * as express from "express";
-import { Blob } from "node:buffer";
+import { Binder } from "./binder";
+import {
+  RequestObject,
+  Headline,
+  Headers,
+  ResponseObject,
+  ResponseArrayBuffer,
+  RequestArrayBuffer,
+} from "../share/types";
+import { requestObjectToBlob } from "../share/request_to_blob";
+import { blobToResponseObject } from "../share/blob_to_response";
+import { Observable, Subject } from "rxjs";
 
-type Headers = { [key: string]: string[] };
 
-interface RequestObject {
-  headline: Headline;
-  headers: Headers;
-  body: Blob;
-}
-
-interface Headline {
-  method: string;
-  url: string;
-}
-
-export function setUpListener() {
+export function setUpEntrance(
+  outgoing: Subject<RequestArrayBuffer>,
+  income: Observable<ResponseArrayBuffer>
+) {
+  const binder = new Binder(outgoing, income);
   const app = express();
   app.use("/", async (req, res) => {
     const headline = getHeadline(req);
@@ -26,9 +29,10 @@ export function setUpListener() {
       headers,
       body,
     };
-    const requestBlob = await requestObjectToBlob(requestObjects); // await 消す
-    await blobToRequestObjects(requestBlob);
-    res.write("ok");
+    const requestBlob = requestObjectToBlob(requestObjects);
+    const response = blobToResponseObject(await binder.onRequest(requestBlob));
+    Object.entries(response.headers).map(([k, v]) => res.setHeader(k, v));
+    res.write(response.body);
     res.end();
   });
   app.listen(8000);
@@ -55,7 +59,7 @@ function getHeaders(req: express.Request): Headers {
   return res;
 }
 
-async function getBody(req: express.Request): Promise<Blob> {
+async function getBody(req: express.Request): Promise<ArrayBuffer> {
   return new Promise((resolve, reject) => {
     const contentLengthStr = req.headers["content-length"];
     if (contentLengthStr === undefined) {
@@ -72,79 +76,7 @@ async function getBody(req: express.Request): Promise<Blob> {
     });
     req.on("end", () => {
       console.log("body len", body.length);
-      const blob = new Blob([body]);
-      resolve(blob);
+      resolve(body);
     });
   });
-}
-
-async function requestObjectToBlob(
-  requestObjects: RequestObject
-): Promise<Blob> {
-  const headline = new Blob([JSON.stringify(requestObjects.headline)]);
-  const headers = new Blob([JSON.stringify(requestObjects.headers)]);
-  const splitters = new Uint32Array([
-    headline.size,
-    headers.size,
-    requestObjects.body.size,
-  ]).buffer as Buffer;
-  console.log("request");
-  console.log("splitters", splitters);
-  console.log(headline.size);
-  console.log(headers.size);
-  console.log(requestObjects.body.size);
-
-  console.log(await headline.arrayBuffer());
-  console.log(await headers.arrayBuffer());
-  console.log(await requestObjects.body.arrayBuffer());
-
-  return new Blob([splitters, headline, headers, requestObjects.body]);
-}
-
-async function blobToRequestObjects(
-  requestBlob: Blob
-): Promise<RequestObject | undefined> {
-  const splittersLength = (32 / 8) * 3;
-  const splittersBlob = requestBlob.slice(0, splittersLength);
-  const splitters = new Uint32Array(await splittersBlob.arrayBuffer());
-  const headlineLength = splitters[0];
-  const headersLength = splitters[1];
-  const bodyLength = splitters[2];
-  console.log("response");
-  console.log(headlineLength);
-  console.log(headersLength);
-  console.log(bodyLength);
-  if (
-    headlineLength === undefined ||
-    headersLength === undefined ||
-    bodyLength === undefined
-  ) {
-    return;
-  }
-  const headline = await decodeHeadline(
-    requestBlob.slice(splittersLength, splittersLength + headlineLength)
-  );
-  const headers = await decodeHeaders(
-    requestBlob.slice(
-      splittersLength + headlineLength,
-      splittersLength + headlineLength + headersLength
-    )
-  );
-  const body = await decodeBody(
-    requestBlob.slice(splittersLength + headlineLength + headersLength)
-  );
-  console.log("end");
-  return undefined;
-}
-
-async function decodeHeadline(blob: Blob) {
-  console.log(await blob.arrayBuffer());
-}
-
-async function decodeHeaders(blob: Blob) {
-  console.log(await blob.arrayBuffer());
-}
-
-async function decodeBody(blob: Blob) {
-  console.log(await blob.arrayBuffer());
 }

@@ -8,5 +8,5 @@ function createUrl() {
 
 const ws = new WebSocket(createUrl());
 ws.addEventListener("open", () => {
-  ws.send("iei");
+  ws.send(new Blob(["fuga"]));
 });
