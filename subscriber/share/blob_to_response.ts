@@ -16,7 +16,7 @@ export function arrayBufferToResponseObject(ab: ResponseArray): {
   const statusStart = REQUEST_ID_LENGTH;
   const statusLength = 32 / 8;
   const status = new Uint32Array(
-    new Uint8Array(ab.slice(statusStart, statusStart + statusLength)).buffer
+    ab.slice(statusStart, statusStart + statusLength).buffer
   )[0];
   if (!status) throw "status nai";
 
@@ -26,7 +26,7 @@ export function arrayBufferToResponseObject(ab: ResponseArray): {
     splitterStart,
     splitterStart + splittersLength
   );
-  const splitters = new Uint32Array(new Uint8Array(splittersBlob).buffer);
+  const splitters = new Uint32Array(splittersBlob.buffer);
   const headersLength = splitters[0];
   const bodyLength = splitters[1];
   if (headersLength === undefined || bodyLength === undefined) {

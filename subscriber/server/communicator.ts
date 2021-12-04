@@ -47,7 +47,7 @@ function onWsOpen(
 ) {
   wsb.register(ws);
   ws.on("message", (msg: ArrayBuffer) => {
-    outgoing.next( new Uint8Array(msg));
+    outgoing.next(new Uint8Array(msg));
   });
   ws.on("close", () => wsb.unlink(ws));
 }

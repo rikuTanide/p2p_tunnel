@@ -6,7 +6,7 @@ export type Headers = { [key: string]: string[] };
 export interface RequestObject {
   headline: Headline;
   headers: Headers;
-  body: ArrayBuffer;
+  body: Uint8Array;
 }
 
 export interface Headline {
@@ -17,5 +17,5 @@ export interface Headline {
 export interface ResponseObject {
   status: number;
   headers: Headers;
-  body: ArrayBuffer;
+  body: Uint8Array;
 }

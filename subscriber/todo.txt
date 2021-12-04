@@ -15,3 +15,4 @@
  - 引数でWebRTCを取得
  - console.log() をきれいにする。
  - blob_to の名前を変える
+ - hostを書き換える

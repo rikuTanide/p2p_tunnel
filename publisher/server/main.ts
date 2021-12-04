@@ -21,7 +21,6 @@ export async function setUp() {
     res.end();
   });
   app.post("/on_request", async (req, res) => {
-    console.log("on request");
     const bodyAB = await readBodyAB(req, res);
     const requestObject = await blobToRequestObjects(bodyAB);
     if (!requestObject) {
@@ -32,10 +31,9 @@ export async function setUp() {
     }
     const { requestID, request } = requestObject;
     const response = await proxy(requestID, request);
-    console.log(response.byteLength);
     res.status(200);
     res.setHeader("content-length", response.byteLength);
-    res.write(new Uint8Array(response));
+    res.write(response);
     res.end();
   });
   app.use("/", express.static("./web/dist"));
@@ -77,7 +75,7 @@ async function proxy(
   const responseObject: ResponseObject = {
     status: res.status,
     headers: toCarryHeaders(res.headers),
-    body: await res.arrayBuffer(),
+    body: new Uint8Array(await res.arrayBuffer()),
   };
   return responseObjectToArrayBuffer(requestID, responseObject);
 }

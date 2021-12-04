@@ -22,6 +22,6 @@ export function requestObjectToBlob(
     ...new Uint8Array(splitters),
     ...headline,
     ...headers,
-    ...new Uint8Array(body),
+    ...body,
   ]);
 }

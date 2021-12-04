@@ -8,20 +8,12 @@ peer.on("open", () => {
   fetch(url.toString());
 });
 peer.on("connection", (connection) => {
-  console.log("connect:", connection.id);
-  connection.on("message", (message) => {
-    console.log(message);
-  });
   connection.on("data", async (message) => {
-    console.log(message);
-    console.log("request start");
     const res = await fetch("/on_request", {
       method: "POST",
       body: message,
     });
-    console.log("get response");
     const blob = await res.blob();
-    console.log(blob.size);
     connection.send(blob);
   });
 });

@@ -17,7 +17,6 @@ function createUrl() {
 
 const ws = new WebSocket(createUrl());
 ws.addEventListener("message", (e) => {
-  console.log(e.data);
   con!.send(e.data);
 });
 

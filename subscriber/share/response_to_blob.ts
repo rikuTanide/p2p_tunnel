@@ -16,6 +16,6 @@ export function responseObjectToArrayBuffer(
     ...new Uint8Array(new Uint32Array([responseObject.status]).buffer),
     ...new Uint8Array(splitters),
     ...headers,
-    ...new Uint8Array(body),
+    ...body,
   ]);
 }
