@@ -1,8 +1,7 @@
 import * as express from "express";
 
-
 function indexHtml(host): string {
- return   `
+  return `
 <!doctype html>
 <html lang="ja">
 <head>
@@ -17,20 +16,20 @@ function indexHtml(host): string {
 </form>
 </body>
 </html>
-`
+`;
 }
 const app = express();
 app.use(express.urlencoded()); //Parse URL-encoded bodies
 
-app.get("/", (req, res)=>{
-    res.status(200);
-    const host = req.header("host");
-    res.send(indexHtml(`${host}`));
+app.get("/", (req, res) => {
+  res.status(200);
+  const host = req.header("host");
+  res.send(indexHtml(`${host}`));
 });
 
 app.post("/", (req, res) => {
-    res.write(JSON.stringify(req.body));
-    res.end();
+  res.write(JSON.stringify(req.body));
+  res.end();
 });
 
 app.listen(3000);

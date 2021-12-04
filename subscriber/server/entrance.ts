@@ -1,12 +1,11 @@
 import * as express from "express";
 import { Binder } from "./binder";
 import {
-  RequestObject,
-  Headline,
   Headers,
-  ResponseObject,
-  ResponseArray,
+  Headline,
   RequestArray,
+  RequestObject,
+  ResponseArray,
 } from "../share/types";
 import { Observable, Subject } from "rxjs";
 

@@ -2,19 +2,20 @@ import * as Puppeteer from "puppeteer";
 import * as express from "express";
 import { blobToRequestObjects } from "../../subscriber/share/blob_to_request";
 import { responseObjectToBlob } from "../../subscriber/share/response_to_blob";
+import * as SharedTypes from "../../subscriber/share/types";
 import {
   RequestObject,
-  ResponseObject,
   ResponseArray,
+  ResponseObject,
 } from "../../subscriber/share/types";
-import * as SharedTypes from "../../subscriber/share/types";
 import fetch, { Headers, HeadersInit } from "node-fetch";
+
 const fs = require("fs");
 
 export async function setUp() {
   const host = "localhost";
   const port = "3000";
-  const originalHost = `${host}:${port}`
+  const originalHost = `${host}:${port}`;
 
   const app = express();
   app.get("/connection_id", (req, res) => {
@@ -66,7 +67,7 @@ function readBodyAB(
 async function proxy(
   requestID: string,
   request: RequestObject,
-  originalHost,
+  originalHost
 ): Promise<ResponseArray> {
   const url = new URL(request.headline.url, "http://localhost:3000/");
 
@@ -92,11 +93,14 @@ function toCarryHeaders(headers: Headers) {
   return res;
 }
 
-function toFetchHeaders(headers: SharedTypes.Headers, originalHost: string): HeadersInit {
+function toFetchHeaders(
+  headers: SharedTypes.Headers,
+  originalHost: string
+): HeadersInit {
   const res: string[][] = [];
   for (const [key, values] of Object.entries(headers)) {
     if (key === "host") {
-      res.push([key, originalHost ]);
+      res.push([key, originalHost]);
       continue;
     }
     for (const value of values) {

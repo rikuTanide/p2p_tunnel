@@ -1,4 +1,4 @@
-import { Headline, Headers, RequestObject } from "./types";
+import { Headers, Headline, RequestObject } from "./types";
 import { REQUEST_ID_LENGTH } from "../server/consts";
 import { toText } from "./util";
 

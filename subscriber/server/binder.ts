@@ -5,13 +5,9 @@ import {
   ResponseArray,
   ResponseObject,
 } from "../share/types";
-import * as SharedTypes from "../share/types";
 import { Observable, Subject } from "rxjs";
 import { requestObjectToBlob } from "../share/request_to_blob";
-import { REQUEST_ID_LENGTH } from "./consts";
 import { blobToRequestObjects } from "../share/blob_to_request";
-import { responseObjectToBlob } from "../share/response_to_blob";
-import fetch, { Headers } from "node-fetch";
 import { blobToResponseObject } from "../share/blob_to_response";
 
 type Callback = (response: ResponseObject) => void;
