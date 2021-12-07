@@ -8,32 +8,32 @@ function blobToRequestObjects(requestAB) {
     const splittersLength = (32 / 8) * 3;
     const splittersBlob = requestAB.slice(consts_1.REQUEST_ID_LENGTH, consts_1.REQUEST_ID_LENGTH + splittersLength);
     const splitters = new Uint32Array(new Uint8Array(splittersBlob).buffer);
-    const headlineLength = splitters[0];
+    const startlineLength = splitters[0];
     const headersLength = splitters[1];
     const bodyLength = splitters[2];
-    if (headlineLength === undefined ||
+    if (startlineLength === undefined ||
         headersLength === undefined ||
         bodyLength === undefined) {
         return;
     }
     const splitterStart = consts_1.REQUEST_ID_LENGTH;
-    const headlineStart = splitterStart + splittersLength;
-    const headersStart = headlineStart + headlineLength;
+    const startlineStart = splitterStart + splittersLength;
+    const headersStart = startlineStart + startlineLength;
     const bodyStart = headersStart + headersLength;
-    const headline = decodeHeadline(requestAB.slice(headlineStart, headlineStart + headlineLength));
+    const startline = decodeStartline(requestAB.slice(startlineStart, startlineStart + startlineLength));
     const headers = decodeHeaders(requestAB.slice(headersStart, headersStart + headersLength));
     const body = requestAB.slice(bodyStart);
     return {
         requestID: requestID,
         request: {
-            headline,
+            startline: startline,
             headers,
             body,
         },
     };
 }
 exports.blobToRequestObjects = blobToRequestObjects;
-function decodeHeadline(array) {
+function decodeStartline(array) {
     const json = (0, util_1.toText)(array);
     return JSON.parse(json);
 }

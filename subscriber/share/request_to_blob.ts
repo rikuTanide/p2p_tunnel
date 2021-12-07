@@ -1,4 +1,5 @@
 import { RequestArray, RequestObject } from "./types";
+import { concat } from "./util";
 
 export function requestObjectToBlob(
   requestID: string,
@@ -17,11 +18,11 @@ export function requestObjectToBlob(
     body.byteLength,
   ]).buffer;
 
-  return Uint8Array.from([
-    ...new TextEncoder().encode(requestID),
-    ...new Uint8Array(splitters),
-    ...startline,
-    ...headers,
-    ...body,
+  return concat([
+    new TextEncoder().encode(requestID),
+    new Uint8Array(splitters),
+    startline,
+    headers,
+    body,
   ]);
 }

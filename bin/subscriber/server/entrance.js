@@ -16,11 +16,11 @@ function setUpEntrance(outgoing, income, host, port) {
     const binder = new binder_1.Binder(outgoing, income);
     const app = express();
     app.use("/", (req, res) => __awaiter(this, void 0, void 0, function* () {
-        const headline = getHeadline(req);
+        const startline = getStartline(req);
         const headers = getHeaders(req);
         const body = yield getBody(req);
         const requestObjects = {
-            headline,
+            startline,
             headers,
             body,
         };
@@ -34,7 +34,7 @@ function setUpEntrance(outgoing, income, host, port) {
     app.listen(port, host);
 }
 exports.setUpEntrance = setUpEntrance;
-function getHeadline(req) {
+function getStartline(req) {
     return {
         method: req.method,
         url: req.url,

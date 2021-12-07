@@ -1,21 +1,22 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.requestObjectToBlob = void 0;
+const util_1 = require("./util");
 function requestObjectToBlob(requestID, requestObjects) {
     const body = requestObjects.body;
-    const headline = new TextEncoder().encode(JSON.stringify(requestObjects.headline));
+    const startline = new TextEncoder().encode(JSON.stringify(requestObjects.startline));
     const headers = new TextEncoder().encode(JSON.stringify(requestObjects.headers));
     const splitters = new Uint32Array([
-        headline.length,
+        startline.length,
         headers.length,
         body.byteLength,
     ]).buffer;
-    return Uint8Array.from([
-        ...new TextEncoder().encode(requestID),
-        ...new Uint8Array(splitters),
-        ...headline,
-        ...headers,
-        ...body,
+    return (0, util_1.concat)([
+        new TextEncoder().encode(requestID),
+        new Uint8Array(splitters),
+        startline,
+        headers,
+        body,
     ]);
 }
 exports.requestObjectToBlob = requestObjectToBlob;

@@ -14,10 +14,11 @@ const fetch = require("node-fetch");
 const response_to_blob_1 = require("../../subscriber/share/response_to_blob");
 function proxy(requestID, request, originalHost) {
     return __awaiter(this, void 0, void 0, function* () {
-        const url = new URL(request.headline.url, `http://${originalHost}/`);
+        const url = new URL(request.startline.url, `http://${originalHost}/`);
         const res = yield fetch.default(url.toString(), {
-            method: request.headline.method,
+            method: request.startline.method,
             headers: toFetchHeaders(request.headers, originalHost),
+            compress: false,
             body: request.body.byteLength === 0 ? undefined : request.body,
         });
         const responseObject = {
