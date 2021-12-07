@@ -6,8 +6,8 @@ import path = require("path");
 
 export function setUpServer(originalHost: string): number {
   const app = express();
-  app.get("/connection_id", (req, res) => {
-    onConnectionID(req, res);
+  app.get("/publisher_id", (req, res) => {
+    onPublisherID(req, res);
   });
   app.post("/on_request", async (req, res) => {
     await onRequest(req, res, originalHost);
@@ -17,13 +17,13 @@ export function setUpServer(originalHost: string): number {
   return (server.address() as AddressInfo).port;
 }
 
-function onConnectionID<P, ResBody, ReqBody, ReqQuery, Locals>(
+function onPublisherID<P, ResBody, ReqBody, ReqQuery, Locals>(
   req: express.Request,
   res: express.Response
 ) {
-  const connectionID = (req.query as { id: string }).id;
+  const publisherID = (req.query as { id: string }).id;
   res.end();
-  console.log(`connectionID is ${connectionID}`);
+  console.log(`publisherID is ${publisherID}`);
 }
 
 async function onRequest<P, ResBody, ReqBody, ReqQuery, Locals>(
