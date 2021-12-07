@@ -1,5 +1,5 @@
-import { Headers, HeadersInit } from "node-fetch";
 import * as fetch from "node-fetch";
+import { Headers, HeadersInit } from "node-fetch";
 import { responseObjectToBlob } from "../../subscriber/share/response_to_blob";
 import * as SharedTypes from "../../subscriber/share/types";
 import {

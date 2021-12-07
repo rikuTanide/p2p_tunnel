@@ -1,7 +1,7 @@
-import { Headers, Startline, RequestObject } from "./types";
+import { Headers, RequestObject, Startline } from "./types";
 import { REQUEST_ID_LENGTH } from "../server/consts";
 import { toText } from "./util";
-import { gunzipSync} from "zlib";
+import { gunzipSync } from "zlib";
 
 export function blobToRequestObjects(
   compressed: Uint8Array

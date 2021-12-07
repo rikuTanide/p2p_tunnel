@@ -1,5 +1,5 @@
 import { ResponseObject } from "./types";
-import {gzipSync} from "zlib";
+import { gzipSync } from "zlib";
 import { concat } from "./util";
 
 export function responseObjectToBlob(

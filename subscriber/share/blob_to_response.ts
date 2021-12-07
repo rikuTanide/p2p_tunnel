@@ -1,11 +1,7 @@
-import {
-  Headers,
-  ResponseArray,
-  ResponseObject,
-} from "./types";
+import { Headers, ResponseArray, ResponseObject } from "./types";
 import { REQUEST_ID_LENGTH } from "../server/consts";
 import { toText } from "./util";
-import { gunzipSync} from "zlib";
+import { gunzipSync } from "zlib";
 
 export function blobToResponseObject(compressed: ResponseArray): {
   requestID: string;

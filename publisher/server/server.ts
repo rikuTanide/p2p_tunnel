@@ -47,9 +47,7 @@ async function onRequest<P, ResBody, ReqBody, ReqQuery, Locals>(
   res.end();
 }
 
-function readBodyAB(
-  req: express.Request
-): Promise<Uint8Array> {
+function readBodyAB(req: express.Request): Promise<Uint8Array> {
   return new Promise((resolve) => {
     const body: number[] = [];
     req.on("data", (data) => {

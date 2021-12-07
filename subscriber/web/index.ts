@@ -1,4 +1,5 @@
 import { DataConnection } from "skyway-js";
+
 const Peer = require("skyway-js");
 
 const publisherPeerID = new URLSearchParams(document.location.search).get(

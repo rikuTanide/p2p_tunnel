@@ -1,5 +1,5 @@
 import { RequestArray, RequestObject } from "./types";
-import {gzipSync, gunzipSync} from "zlib";
+import { gzipSync } from "zlib";
 import { concat } from "./util";
 
 export function requestObjectToBlob(

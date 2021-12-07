@@ -2,10 +2,10 @@ import * as express from "express";
 import { Binder } from "./binder";
 import {
   Headers,
-  Startline,
   RequestArray,
   RequestObject,
   ResponseArray,
+  Startline,
 } from "../share/types";
 import { Observable, Subject } from "rxjs";
 
