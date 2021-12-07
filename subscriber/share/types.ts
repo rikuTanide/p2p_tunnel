@@ -4,12 +4,12 @@ export type ResponseArray = Uint8Array;
 export type Headers = { [key: string]: string[] };
 
 export interface RequestObject {
-  headline: Headline;
+  startline: Startline;
   headers: Headers;
   body: Uint8Array;
 }
 
-export interface Headline {
+export interface Startline {
   method: string;
   url: string;
 }

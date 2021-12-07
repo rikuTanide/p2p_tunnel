@@ -1,4 +1,4 @@
-import { Headers, Headline, RequestObject } from "./types";
+import { Headers, Startline, RequestObject } from "./types";
 import { REQUEST_ID_LENGTH } from "../server/consts";
 import { toText } from "./util";
 
@@ -13,22 +13,22 @@ export function blobToRequestObjects(
     REQUEST_ID_LENGTH + splittersLength
   );
   const splitters = new Uint32Array(new Uint8Array(splittersBlob).buffer);
-  const headlineLength = splitters[0];
+  const startlineLength = splitters[0];
   const headersLength = splitters[1];
   const bodyLength = splitters[2];
   if (
-    headlineLength === undefined ||
+    startlineLength === undefined ||
     headersLength === undefined ||
     bodyLength === undefined
   ) {
     return;
   }
   const splitterStart = REQUEST_ID_LENGTH;
-  const headlineStart = splitterStart + splittersLength;
-  const headersStart = headlineStart + headlineLength;
+  const startlineStart = splitterStart + splittersLength;
+  const headersStart = startlineStart + startlineLength;
   const bodyStart = headersStart + headersLength;
-  const headline = decodeHeadline(
-    requestAB.slice(headlineStart, headlineStart + headlineLength)
+  const startline = decodeStartline(
+    requestAB.slice(startlineStart, startlineStart + startlineLength)
   );
   const headers = decodeHeaders(
     requestAB.slice(headersStart, headersStart + headersLength)
@@ -38,14 +38,14 @@ export function blobToRequestObjects(
   return {
     requestID: requestID,
     request: {
-      headline,
+      startline: startline,
       headers,
       body,
     },
   };
 }
 
-function decodeHeadline(array: Uint8Array): Headline {
+function decodeStartline(array: Uint8Array): Startline {
   const json = toText(array);
   return JSON.parse(json);
 }

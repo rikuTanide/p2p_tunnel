@@ -17,3 +17,8 @@
  - import綺麗にする
  - WSのポートを動的にする
  - 引数でWebRTCを取得
+ - startline
+ - concat
+ - compress
+ - 不要Importの削除
+ - shareを外に出す

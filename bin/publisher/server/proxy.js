@@ -18,7 +18,6 @@ function proxy(requestID, request, originalHost) {
         const res = yield fetch.default(url.toString(), {
             method: request.headline.method,
             headers: toFetchHeaders(request.headers, originalHost),
-            compress: false,
             body: request.body.byteLength === 0 ? undefined : request.body,
         });
         const responseObject = {

@@ -2,7 +2,7 @@ import * as express from "express";
 import { Binder } from "./binder";
 import {
   Headers,
-  Headline,
+  Startline,
   RequestArray,
   RequestObject,
   ResponseArray,
@@ -18,12 +18,12 @@ export function setUpEntrance(
   const binder = new Binder(outgoing, income);
   const app = express();
   app.use("/", async (req, res) => {
-    const headline = getHeadline(req);
+    const startline = getStartline(req);
     const headers = getHeaders(req);
     const body = await getBody(req);
 
     const requestObjects: RequestObject = {
-      headline,
+      startline,
       headers,
       body,
     };
@@ -37,7 +37,7 @@ export function setUpEntrance(
   app.listen(port, host);
 }
 
-function getHeadline(req: express.Request): Headline {
+function getStartline(req: express.Request): Startline {
   return {
     method: req.method,
     url: req.url,

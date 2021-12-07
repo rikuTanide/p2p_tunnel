@@ -13,10 +13,10 @@ export async function proxy(
   request: RequestObject,
   originalHost
 ): Promise<ResponseArray> {
-  const url = new URL(request.headline.url, `http://${originalHost}/`);
+  const url = new URL(request.startline.url, `http://${originalHost}/`);
 
   const res = await fetch.default(url.toString(), {
-    method: request.headline.method,
+    method: request.startline.method,
     headers: toFetchHeaders(request.headers, originalHost),
     compress: false,
     body: request.body.byteLength === 0 ? undefined : request.body,

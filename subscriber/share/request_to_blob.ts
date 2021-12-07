@@ -5,14 +5,14 @@ export function requestObjectToBlob(
   requestObjects: RequestObject
 ): RequestArray {
   const body = requestObjects.body;
-  const headline = new TextEncoder().encode(
-    JSON.stringify(requestObjects.headline)
+  const startline = new TextEncoder().encode(
+    JSON.stringify(requestObjects.startline)
   );
   const headers = new TextEncoder().encode(
     JSON.stringify(requestObjects.headers)
   );
   const splitters = new Uint32Array([
-    headline.length,
+    startline.length,
     headers.length,
     body.byteLength,
   ]).buffer;
@@ -20,7 +20,7 @@ export function requestObjectToBlob(
   return Uint8Array.from([
     ...new TextEncoder().encode(requestID),
     ...new Uint8Array(splitters),
-    ...headline,
+    ...startline,
     ...headers,
     ...body,
   ]);
