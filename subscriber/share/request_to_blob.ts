@@ -1,4 +1,5 @@
 import { RequestArray, RequestObject } from "./types";
+import {gzipSync, gunzipSync} from "zlib";
 import { concat } from "./util";
 
 export function requestObjectToBlob(
@@ -18,11 +19,12 @@ export function requestObjectToBlob(
     body.byteLength,
   ]).buffer;
 
-  return concat([
+  const plain = concat([
     new TextEncoder().encode(requestID),
     new Uint8Array(splitters),
     startline,
     headers,
     body,
   ]);
+  return gzipSync(plain);
 }

@@ -3,7 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.blobToRequestObjects = void 0;
 const consts_1 = require("../server/consts");
 const util_1 = require("./util");
-function blobToRequestObjects(requestAB) {
+const zlib_1 = require("zlib");
+function blobToRequestObjects(compressed) {
+    const requestAB = new Uint8Array((0, zlib_1.gunzipSync)(compressed));
     const requestID = (0, util_1.toText)(requestAB.slice(0, consts_1.REQUEST_ID_LENGTH));
     const splittersLength = (32 / 8) * 3;
     const splittersBlob = requestAB.slice(consts_1.REQUEST_ID_LENGTH, consts_1.REQUEST_ID_LENGTH + splittersLength);

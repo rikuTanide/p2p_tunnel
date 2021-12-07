@@ -31,7 +31,7 @@ async function onRequest<P, ResBody, ReqBody, ReqQuery, Locals>(
   res: express.Response,
   originalHost: string
 ) {
-  const bodyAB = await readBodyAB(req, res);
+  const bodyAB = await readBodyAB(req);
   const requestObject = await blobToRequestObjects(bodyAB);
   if (!requestObject) {
     console.log("error");
@@ -48,8 +48,7 @@ async function onRequest<P, ResBody, ReqBody, ReqQuery, Locals>(
 }
 
 function readBodyAB(
-  req: express.Request,
-  res: express.Response
+  req: express.Request
 ): Promise<Uint8Array> {
   return new Promise((resolve) => {
     const body: number[] = [];

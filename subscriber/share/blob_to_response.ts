@@ -1,17 +1,17 @@
 import {
   Headers,
-  Startline,
-  RequestObject,
   ResponseArray,
   ResponseObject,
 } from "./types";
 import { REQUEST_ID_LENGTH } from "../server/consts";
 import { toText } from "./util";
+import { gunzipSync} from "zlib";
 
-export function blobToResponseObject(ab: ResponseArray): {
+export function blobToResponseObject(compressed: ResponseArray): {
   requestID: string;
   response: ResponseObject;
 } {
+  const ab = new Uint8Array(gunzipSync(compressed));
   const requestID = toText(ab.slice(0, REQUEST_ID_LENGTH));
   const statusStart = REQUEST_ID_LENGTH;
   const statusLength = 32 / 8;

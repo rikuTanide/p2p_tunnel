@@ -3,7 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.blobToResponseObject = void 0;
 const consts_1 = require("../server/consts");
 const util_1 = require("./util");
-function blobToResponseObject(ab) {
+const zlib_1 = require("zlib");
+function blobToResponseObject(compressed) {
+    const ab = new Uint8Array((0, zlib_1.gunzipSync)(compressed));
     const requestID = (0, util_1.toText)(ab.slice(0, consts_1.REQUEST_ID_LENGTH));
     const statusStart = consts_1.REQUEST_ID_LENGTH;
     const statusLength = 32 / 8;

@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.requestObjectToBlob = void 0;
+const zlib_1 = require("zlib");
 const util_1 = require("./util");
 function requestObjectToBlob(requestID, requestObjects) {
     const body = requestObjects.body;
@@ -11,13 +12,14 @@ function requestObjectToBlob(requestID, requestObjects) {
         headers.length,
         body.byteLength,
     ]).buffer;
-    return (0, util_1.concat)([
+    const plain = (0, util_1.concat)([
         new TextEncoder().encode(requestID),
         new Uint8Array(splitters),
         startline,
         headers,
         body,
     ]);
+    return (0, zlib_1.gzipSync)(plain);
 }
 exports.requestObjectToBlob = requestObjectToBlob;
 //# sourceMappingURL=request_to_blob.js.map

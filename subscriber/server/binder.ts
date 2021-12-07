@@ -23,14 +23,9 @@ export class Binder {
   }
 
   public onRequest(request: RequestObject): Promise<ResponseObject> {
-    return new Promise(async (resolve, reject) => {
+    return new Promise(async (resolve) => {
       const requestID = createRequestID();
       const ab = requestObjectToBlob(requestID, request);
-      const resAb = blobToRequestObjects(ab);
-      if (!resAb) {
-        reject();
-        return;
-      }
       const callback: Callback = (req) => resolve(req);
       this.map.set(requestID, callback);
       this.outgoing.next(ab);

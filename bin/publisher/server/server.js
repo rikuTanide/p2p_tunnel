@@ -34,7 +34,7 @@ function onConnectionID(req, res) {
 }
 function onRequest(req, res, originalHost) {
     return __awaiter(this, void 0, void 0, function* () {
-        const bodyAB = yield readBodyAB(req, res);
+        const bodyAB = yield readBodyAB(req);
         const requestObject = yield (0, blob_to_request_1.blobToRequestObjects)(bodyAB);
         if (!requestObject) {
             console.log("error");
@@ -50,7 +50,7 @@ function onRequest(req, res, originalHost) {
         res.end();
     });
 }
-function readBodyAB(req, res) {
+function readBodyAB(req) {
     return new Promise((resolve) => {
         const body = [];
         req.on("data", (data) => {

@@ -1,10 +1,12 @@
 import { Headers, Startline, RequestObject } from "./types";
 import { REQUEST_ID_LENGTH } from "../server/consts";
 import { toText } from "./util";
+import { gunzipSync} from "zlib";
 
 export function blobToRequestObjects(
-  requestAB: Uint8Array
+  compressed: Uint8Array
 ): { requestID: string; request: RequestObject } | undefined {
+  const requestAB = new Uint8Array(gunzipSync(compressed));
   const requestID = toText(requestAB.slice(0, REQUEST_ID_LENGTH));
 
   const splittersLength = (32 / 8) * 3;
