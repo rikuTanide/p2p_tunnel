@@ -16,8 +16,8 @@ const proxy_1 = require("./proxy");
 const path = require("path");
 function setUpServer(originalHost) {
     const app = express();
-    app.get("/connection_id", (req, res) => {
-        onConnectionID(req, res);
+    app.get("/publisher_id", (req, res) => {
+        onPublisherID(req, res);
     });
     app.post("/on_request", (req, res) => __awaiter(this, void 0, void 0, function* () {
         yield onRequest(req, res, originalHost);
@@ -27,10 +27,10 @@ function setUpServer(originalHost) {
     return server.address().port;
 }
 exports.setUpServer = setUpServer;
-function onConnectionID(req, res) {
-    const connectionID = req.query.id;
+function onPublisherID(req, res) {
+    const publisherID = req.query.id;
     res.end();
-    console.log(`connectionID is ${connectionID}`);
+    console.log(`publisherID is ${publisherID}`);
 }
 function onRequest(req, res, originalHost) {
     return __awaiter(this, void 0, void 0, function* () {
