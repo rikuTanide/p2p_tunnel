@@ -12,7 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Binder = void 0;
 const crypto_1 = require("crypto");
 const request_to_blob_1 = require("../share/request_to_blob");
-const blob_to_request_1 = require("../share/blob_to_request");
 const blob_to_response_1 = require("../share/blob_to_response");
 class Binder {
     constructor(outgoing, income) {
@@ -24,14 +23,9 @@ class Binder {
         }));
     }
     onRequest(request) {
-        return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
+        return new Promise((resolve) => __awaiter(this, void 0, void 0, function* () {
             const requestID = createRequestID();
             const ab = (0, request_to_blob_1.requestObjectToBlob)(requestID, request);
-            const resAb = (0, blob_to_request_1.blobToRequestObjects)(ab);
-            if (!resAb) {
-                reject();
-                return;
-            }
             const callback = (req) => resolve(req);
             this.map.set(requestID, callback);
             this.outgoing.next(ab);
