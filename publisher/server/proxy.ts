@@ -1,7 +1,5 @@
-import fetch, { Headers, HeadersInit } from "node-fetch";
-import * as Puppeteer from "puppeteer";
-import * as express from "express";
-import { blobToRequestObjects } from "../../subscriber/share/blob_to_request";
+import { Headers, HeadersInit } from "node-fetch";
+import * as fetch from "node-fetch";
 import { responseObjectToBlob } from "../../subscriber/share/response_to_blob";
 import * as SharedTypes from "../../subscriber/share/types";
 import {
@@ -9,17 +7,15 @@ import {
   ResponseArray,
   ResponseObject,
 } from "../../subscriber/share/types";
-import { AddressInfo } from "net";
-import { setUpServer } from "./server";
 
 export async function proxy(
   requestID: string,
   request: RequestObject,
   originalHost
 ): Promise<ResponseArray> {
-  const url = new URL(request.headline.url, "http://localhost:3000/");
+  const url = new URL(request.headline.url, `http://${originalHost}/`);
 
-  const res = await fetch(url.toString(), {
+  const res = await fetch.default(url.toString(), {
     method: request.headline.method,
     headers: toFetchHeaders(request.headers, originalHost),
     compress: false,

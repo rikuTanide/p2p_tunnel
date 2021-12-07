@@ -1,8 +1,8 @@
 import * as express from "express";
 import { AddressInfo } from "net";
-const fs = require("fs");
 import { blobToRequestObjects } from "../../subscriber/share/blob_to_request";
 import { proxy } from "./proxy";
+import path = require("path");
 
 export function setUpServer(originalHost: string): number {
   const app = express();
@@ -12,7 +12,7 @@ export function setUpServer(originalHost: string): number {
   app.post("/on_request", async (req, res) => {
     await onRequest(req, res, originalHost);
   });
-  app.use("/", express.static("./web/dist"));
+  app.use("/", express.static(path.join(__dirname, "../web/dist")));
   const server = app.listen();
   return (server.address() as AddressInfo).port;
 }

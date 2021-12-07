@@ -1,5 +1,0 @@
-{
-  "watch": ["server/", "share/", "../publisher/server/"],
-  "ext": "ts",
-  "exec": "ts-node server\\main.ts --port=9000 --id=6fMFGZK88oFTBFpZ"
-}

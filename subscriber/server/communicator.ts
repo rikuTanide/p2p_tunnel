@@ -5,8 +5,7 @@ import * as Puppeteer from "puppeteer";
 import { RequestArray, ResponseArray } from "../share/types";
 import { Observable, Subject } from "rxjs";
 import { AddressInfo } from "net";
-
-const fs = require("fs");
+import path = require("path");
 
 class WebSocketBinder {
   private set: Set<WebSocket> = new Set();
@@ -31,7 +30,7 @@ export async function setUpCommunicator(
   const wsb = new WebSocketBinder();
 
   const app = expressWs(express()).app;
-  app.use("/", express.static("./web/dist"));
+  app.use("/", express.static(path.join(__dirname, "../web/dist")));
   app.ws("/ws", (ws, req) => onWsOpen(ws, req, wsb, outgoing));
   const server = app.listen();
   const port = (server.address() as AddressInfo).port;

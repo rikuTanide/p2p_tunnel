@@ -4,11 +4,17 @@ import { RequestArray, ResponseArray } from "../share/types";
 import { setUpCommunicator } from "./communicator";
 const flags = require("flags");
 
+export function main() {
+  const [host, port, connectionID] = getFlags();
+  start(host, port, connectionID);
+}
+
 function getFlags(): [string, number, string] {
   flags.defineString("host");
   flags.defineInteger("port");
   flags.defineString("id");
-  flags.parse();
+  const f = process.argv.slice(3);
+  flags.parse(f);
   const host = flags.get("host") || "localhost";
   const port = flags.get("port") || 8000;
   const id = flags.get("id");
@@ -35,6 +41,3 @@ async function start(host: string, port: number, publisherPeerID: string) {
   );
   console.log(`http://${host}:${port}/`);
 }
-
-const [host, port, connectionID] = getFlags();
-start(host, port, connectionID);
