@@ -1,6 +1,6 @@
 import * as express from "express";
 import { AddressInfo } from "net";
-import { blobToRequestObjects } from "../../subscriber/share/blob_to_request";
+import { blobToRequestObjects } from "../../share/blob_to_request";
 import { proxy } from "./proxy";
 import path = require("path");
 

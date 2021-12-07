@@ -6,7 +6,7 @@ import {
   RequestObject,
   ResponseArray,
   Startline,
-} from "../share/types";
+} from "../../share/types";
 import { Observable, Subject } from "rxjs";
 
 export function setUpEntrance(

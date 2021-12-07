@@ -2,7 +2,7 @@ import * as expressWs from "express-ws";
 import * as express from "express";
 import { WebSocket } from "ws";
 import * as Puppeteer from "puppeteer";
-import { RequestArray, ResponseArray } from "../share/types";
+import { RequestArray, ResponseArray } from "../../share/types";
 import { Observable, Subject } from "rxjs";
 import { AddressInfo } from "net";
 import path = require("path");

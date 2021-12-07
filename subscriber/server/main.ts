@@ -1,6 +1,6 @@
 import { setUpEntrance } from "./entrance";
 import { Subject } from "rxjs";
-import { RequestArray, ResponseArray } from "../share/types";
+import { RequestArray, ResponseArray } from "../../share/types";
 import { setUpCommunicator } from "./communicator";
 
 const flags = require("flags");

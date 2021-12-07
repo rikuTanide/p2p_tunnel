@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.blobToResponseObject = void 0;
-const consts_1 = require("../server/consts");
+const consts_1 = require("./consts");
 const util_1 = require("./util");
 const zlib_1 = require("zlib");
 function blobToResponseObject(compressed) {

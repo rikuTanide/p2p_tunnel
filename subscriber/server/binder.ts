@@ -4,10 +4,10 @@ import {
   RequestObject,
   ResponseArray,
   ResponseObject,
-} from "../share/types";
+} from "../../share/types";
 import { Observable, Subject } from "rxjs";
-import { requestObjectToBlob } from "../share/request_to_blob";
-import { blobToResponseObject } from "../share/blob_to_response";
+import { requestObjectToBlob } from "../../share/request_to_blob";
+import { blobToResponseObject } from "../../share/blob_to_response";
 
 type Callback = (response: ResponseObject) => void;
 export class Binder {

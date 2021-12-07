@@ -1,5 +1,5 @@
 import { Headers, RequestObject, Startline } from "./types";
-import { REQUEST_ID_LENGTH } from "../server/consts";
+import { REQUEST_ID_LENGTH } from "./consts";
 import { toText } from "./util";
 import { gunzipSync } from "zlib";
 

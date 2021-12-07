@@ -11,8 +11,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Binder = void 0;
 const crypto_1 = require("crypto");
-const request_to_blob_1 = require("../share/request_to_blob");
-const blob_to_response_1 = require("../share/blob_to_response");
+const request_to_blob_1 = require("../../share/request_to_blob");
+const blob_to_response_1 = require("../../share/blob_to_response");
 class Binder {
     constructor(outgoing, income) {
         this.outgoing = outgoing;

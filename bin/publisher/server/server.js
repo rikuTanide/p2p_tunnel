@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.setUpServer = void 0;
 const express = require("express");
-const blob_to_request_1 = require("../../subscriber/share/blob_to_request");
+const blob_to_request_1 = require("../../share/blob_to_request");
 const proxy_1 = require("./proxy");
 const path = require("path");
 function setUpServer(originalHost) {
